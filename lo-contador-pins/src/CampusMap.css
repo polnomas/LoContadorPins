@@ -1,0 +1,5 @@
+.pin-overlay {
+    position: relative;
+    display: inline-block;
+    cursor: crosshair;
+}
