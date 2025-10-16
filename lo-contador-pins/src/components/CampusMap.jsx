@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ReactSVG } from 'react-svg'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import Pin from './Pin'
@@ -16,8 +16,10 @@ function CampusMap() {
         width: 1200,
         height: 800,
     })
-    
+    const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 })
+
     const viewportRef = useRef(null)
+    const transformRef = useRef(null)
 
     const handleTransformed = useCallback((ref, state) => {
         if (state) {
@@ -99,11 +101,100 @@ function CampusMap() {
         setPins((prev) => [...prev, newPin])
     }, [transform, contentSize])
 
+    useEffect(() => {
+        const viewportElement = viewportRef.current
+        if (!viewportElement) {
+            return undefined
+        }
+
+        const updateViewportSize = () => {
+            const rect = viewportElement.getBoundingClientRect()
+            setViewportSize((prev) =>
+                prev.width === rect.width && prev.height === rect.height
+                    ? prev
+                    : { width: rect.width, height: rect.height },
+            )
+        }
+
+        updateViewportSize()
+
+        if (typeof ResizeObserver !== 'undefined') {
+            const observer = new ResizeObserver((entries) => {
+                for (const entry of entries) {
+                    const { width, height } = entry.contentRect
+                    setViewportSize((prev) =>
+                        prev.width === width && prev.height === height
+                            ? prev
+                            : { width, height },
+                    )
+                }
+            })
+
+            observer.observe(viewportElement)
+            return () => observer.disconnect()
+        }
+
+        window.addEventListener('resize', updateViewportSize)
+        return () => window.removeEventListener('resize', updateViewportSize)
+    }, [])
+
+    const fitScale = useMemo(() => {
+        if (!contentSize.width || !contentSize.height || !viewportSize.width || !viewportSize.height) {
+            return 1
+        }
+
+        const widthRatio = viewportSize.width / contentSize.width
+        const heightRatio = viewportSize.height / contentSize.height
+
+        const scale = Math.min(widthRatio, heightRatio)
+        return Number.isFinite(scale) && scale > 0 ? scale : 1
+    }, [contentSize, viewportSize])
+
+    const maxScale = useMemo(() => (fitScale > 0 ? fitScale : 1), [fitScale])
+    const minScale = useMemo(() => {
+        if (!maxScale) {
+            return 0.1
+        }
+
+        const suggestedMin = maxScale / 4
+        const boundedMin = Math.max(0.1, suggestedMin)
+        return Math.min(boundedMin, maxScale)
+    }, [maxScale])
+
+    useEffect(() => {
+        const instance = transformRef.current
+        if (
+            !instance ||
+            !contentSize.width ||
+            !contentSize.height ||
+            !viewportSize.width ||
+            !viewportSize.height
+        ) {
+            return
+        }
+
+        const scale = maxScale || 1
+        const scaledWidth = contentSize.width * scale
+        const scaledHeight = contentSize.height * scale
+
+        const positionX = (viewportSize.width - scaledWidth) / 2
+        const positionY = (viewportSize.height - scaledHeight) / 2
+
+        instance.setTransform(positionX, positionY, scale, 0)
+        setTransform((prev) =>
+            prev.scale === scale && prev.positionX === positionX && prev.positionY === positionY
+                ? prev
+                : { scale, positionX, positionY },
+        )
+    }, [contentSize, viewportSize, maxScale])
+
     return (
         <div className="map-viewport" ref={viewportRef} onClick={handleViewportClick}>
             <TransformWrapper
-                minScale={0.4}
-                maxScale={12}
+                ref={transformRef}
+                minScale={minScale}
+                maxScale={maxScale}
+                initialScale={maxScale}
                 wheel={{ step: 0.15 }}
                 panning={{ velocityDisabled: true }}
                 doubleClick={{ disabled: true }}
