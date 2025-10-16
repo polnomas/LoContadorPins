@@ -1,6 +1,6 @@
 import '../styles/Pin.css'
-
-function Pin({ x, y, id }) {
+//NOTE: id podría agregarse como otro atributo al final
+function Pin({ x, y }) { 
     return (
         <div 
             className="pin" 
