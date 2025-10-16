@@ -20,6 +20,7 @@ function CampusMap() {
 
     const viewportRef = useRef(null)
     const transformRef = useRef(null)
+    const isPanningRef = useRef(false)
 
     const handleTransformed = useCallback((ref, state) => {
         if (state) {
@@ -87,9 +88,13 @@ function CampusMap() {
         const yContent = (yViewport - positionY) / scale
 
         if (
-            xContent < 0 || yContent < 0 ||
-            xContent > contentSize.width || yContent > contentSize.height
+            isPanningRef.current ||
+            xContent < 0 ||
+            yContent < 0 ||
+            xContent > contentSize.width ||
+            yContent > contentSize.height
         ) {
+            isPanningRef.current = false
             return
         }
 
@@ -139,7 +144,12 @@ function CampusMap() {
     }, [])
 
     const fitScale = useMemo(() => {
-        if (!contentSize.width || !contentSize.height || !viewportSize.width || !viewportSize.height) {
+        if (
+            !contentSize.width ||
+            !contentSize.height ||
+            !viewportSize.width ||
+            !viewportSize.height
+        ) {
             return 1
         }
 
@@ -150,16 +160,15 @@ function CampusMap() {
         return Number.isFinite(scale) && scale > 0 ? scale : 1
     }, [contentSize, viewportSize])
 
-    const maxScale = useMemo(() => (fitScale > 0 ? fitScale : 1), [fitScale])
-    const minScale = useMemo(() => {
-        if (!maxScale) {
-            return 0.1
+    const minScale = useMemo(() => (fitScale > 0 ? fitScale : 1), [fitScale])
+    const maxScale = useMemo(() => {
+        if (!minScale) {
+            return 4
         }
 
-        const suggestedMin = maxScale / 4
-        const boundedMin = Math.max(0.1, suggestedMin)
-        return Math.min(boundedMin, maxScale)
-    }, [maxScale])
+        const desiredMax = minScale * 6
+        return Math.max(desiredMax, minScale)
+    }, [minScale])
 
     useEffect(() => {
         const instance = transformRef.current
@@ -173,7 +182,7 @@ function CampusMap() {
             return
         }
 
-        const scale = maxScale || 1
+        const scale = minScale || 1
         const scaledWidth = contentSize.width * scale
         const scaledHeight = contentSize.height * scale
 
@@ -186,7 +195,7 @@ function CampusMap() {
                 ? prev
                 : { scale, positionX, positionY },
         )
-    }, [contentSize, viewportSize, maxScale])
+    }, [contentSize, viewportSize, minScale])
 
     return (
         <div className="map-viewport" ref={viewportRef} onClick={handleViewportClick}>
@@ -194,12 +203,20 @@ function CampusMap() {
                 ref={transformRef}
                 minScale={minScale}
                 maxScale={maxScale}
-                initialScale={maxScale}
+                initialScale={minScale}
                 wheel={{ step: 0.15 }}
                 panning={{ velocityDisabled: true }}
                 doubleClick={{ disabled: true }}
+                limitToBounds
+                centerZoomedOut
                 onTransformed={handleTransformed}
                 onInit={handleInit}
+                onPanningStart={() => {
+                    isPanningRef.current = true
+                }}
+                onPanningStop={() => {
+                    isPanningRef.current = false
+                }}
             >
                 <TransformComponent
                     wrapperStyle={{ width: '100%', height: '100%' }}
