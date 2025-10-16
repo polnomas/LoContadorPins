@@ -19,36 +19,63 @@ function CampusMap() {
     
     const viewportRef = useRef(null)
 
-    const handleTransformed = useCallback((ref) => {
-        if (ref?.instance?.transformState) {
-            const {scale, positionX, positionY} = ref.instance.transformState
-            setTransform({scale, positionX, positionY})
+    const handleTransformed = useCallback((ref, state) => {
+        if (state) {
+            const { scale, positionX, positionY } = state
+            setTransform({ scale, positionX, positionY })
+        }
+    }, [])
+
+    const handleInit = useCallback((ref) => {
+        if (ref?.state) {
+            const { scale, positionX, positionY } = ref.state
+            setTransform({ scale, positionX, positionY })
         }
     }, [])
 
     const afterInjection = useCallback((svg) => {
-        svg.removeAttribute('width')
-        svg.removeAttribute('height')
+        if (!svg) {
+            return
+        }
+
         svg.style.display = 'block'
 
-        const vb = svg.getAttribute('viewBox')
-        if (vb) {
-            const [, , vbw, vbh] = vb.split(/\s+/).map(Number)
-            if (vbw && vbh) {
-                setContentSize({ width: vbw, height: vbh })
-                return
+        const widthAttr = Number(svg.getAttribute('width'))
+        const heightAttr = Number(svg.getAttribute('height'))
+
+        if (!svg.getAttribute('viewBox') && widthAttr > 0 && heightAttr > 0) {
+            svg.setAttribute('viewBox', `0 0 ${widthAttr} ${heightAttr}`)
+        }
+
+        svg.removeAttribute('width')
+        svg.removeAttribute('height')
+        svg.style.width = '100%'
+        svg.style.height = '100%'
+
+        let width = widthAttr
+        let height = heightAttr
+
+        if (!width || !height) {
+            try {
+                const bbox = svg.getBBox()
+                width = Math.max(1, bbox.width)
+                height = Math.max(1, bbox.height)
+            } catch {
+                width = 1200
+                height = 800
             }
         }
-        
-        try {
-            const bbox = svg.getBBox()
-            setContentSize({ width: Math.max(1, bbox.width), height: Math.max(1, bbox.height) })
-        } catch {
-            setContentSize({ width: 1200, height: 800 })
-        }
+
+        setContentSize((prev) =>
+            prev.width === width && prev.height === height ? prev : { width, height },
+        )
     }, [])
 
     const handleViewportClick = useCallback((event) => {
+        if (!viewportRef.current) {
+            return
+        }
+
         const rect = viewportRef.current.getBoundingClientRect()
         const xViewport = event.clientX - rect.left
         const yViewport = event.clientY - rect.top
@@ -81,6 +108,7 @@ function CampusMap() {
                 panning={{ velocityDisabled: true }}
                 doubleClick={{ disabled: true }}
                 onTransformed={handleTransformed}
+                onInit={handleInit}
             >
                 <TransformComponent
                     wrapperStyle={{ width: '100%', height: '100%' }}
