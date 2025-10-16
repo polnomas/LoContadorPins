@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ReactSVG } from 'react-svg'
 import Pin from './Pin'
-import './CampusMap.css'
+import '../styles/CampusMap.css'
 
 function CampusMap() {
     const [pins, setPins] = useState([])

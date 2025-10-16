@@ -1,4 +1,4 @@
-import './Pin.css'
+import '../styles/Pin.css'
 
 function Pin({ x, y, id }) {
     return (
