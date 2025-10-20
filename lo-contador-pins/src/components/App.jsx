@@ -3,9 +3,7 @@ import CampusMap from './CampusMap'
 
 function App() {
   return (
-    <>
       <CampusMap/>
-    </>
   )
 }
 
