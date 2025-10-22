@@ -1,8 +1,22 @@
-/* styles/App.css — versión mínima */
-#root {
-  /* Ajusta a tu gusto o elimínalo si harás layout propio */
-  /* max-width: 1280px; */
-  margin: 0 auto;
-  /* padding: 2rem; */
-  text-align: center;
+.mode-button {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0077ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px; 
+  max-width: 280px;   
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+  text-align: center; 
+  white-space: normal; 
+}
+
+.mode-button:hover {
+  background-color: #005ecc;
 }
