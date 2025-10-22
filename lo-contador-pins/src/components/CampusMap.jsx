@@ -33,10 +33,13 @@ function CampusMap() {
       wheel={{ step: 0.01, smoothStep: 0.002 }}
       zoomAnimation={{ disabled: false, size: 0.3, animationTime: 400 }}
       doubleClick={{ disabled: true }}
-      minScale={0.25}
+      minScale={0.4}
       onTransformed={handleTransformed}
-      initialScale={1}
+      initialScale={0.4}
       limitToBounds={false}
+      centerOnInit={false}
+      initialPositionX={(window.innerWidth - 2544 * 0.4) / 2}
+      initialPositionY={(window.innerHeight - 1511 * 0.4) / 2}
     >
         <TransformComponent>
             <div
@@ -48,9 +51,6 @@ function CampusMap() {
                         src="/Group 3.svg"
                         wrapper="div"
                         className="map-svg-wrap"
-                        // style={{
-                        //   width: `${((2544 / window.screen.width) * 100)}%`
-                        // }}
                     />
                 </div>
                 {pins.map((pin) => (
