@@ -5,14 +5,15 @@ import "../styles/CampusMap.css";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 function CampusMap() {
-  const [pins, setPins] = useState([]);
+  const [pins, setPins] = useState([])
+  const [currentScale, setCurrentScale] = useState(1)
 
   const handleSVGClick = (event) => {
-    // const rect = event.currentTarget.getBoundingClientRect()
-    console.log('viewport', event.clientX, event.clientY)
+    const rect = event.currentTarget.getBoundingClientRect()
+    // console.log('viewport', event.clientX, event.clientY)
     // console.log('rect', rect.left, rect.top)
-    const x = event.clientX
-    const y = event.clientY
+    const x = (event.clientX - rect.left) / currentScale
+    const y = (event.clientY - rect.top) / currentScale
 
     const newPin = {
       id: Date.now().toString(),
@@ -21,14 +22,21 @@ function CampusMap() {
     };
 
     setPins((prev) => [...prev, newPin]);
-  };
+  }
+  const handleTransformed = (ref, state) => {
+    setCurrentScale(state.scale)
+  }
 
 
   return (
     <TransformWrapper
-      wheel={{ step: 0.1, smoothStep: 0.002 }}
+      wheel={{ step: 0.01, smoothStep: 0.002 }}
       zoomAnimation={{ disabled: false, size: 0.3, animationTime: 400 }}
       doubleClick={{ disabled: true }}
+      minScale={0.25}
+      onTransformed={handleTransformed}
+      initialScale={1}
+      limitToBounds={false}
     >
         <TransformComponent>
             <div
@@ -40,6 +48,9 @@ function CampusMap() {
                         src="/Group 3.svg"
                         wrapper="div"
                         className="map-svg-wrap"
+                        // style={{
+                        //   width: `${((2544 / window.screen.width) * 100)}%`
+                        // }}
                     />
                 </div>
                 {pins.map((pin) => (
