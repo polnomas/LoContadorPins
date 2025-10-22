@@ -1,9 +1,18 @@
+import { useState } from 'react'
 import '../styles/App.css'
-import CampusMap from './CampusMap'
+import CampusScene from './CampusScene'
 
 function App() {
+  const [mode, setMode] = useState('explore') 
+  const handleChangeMode = () => {
+    if (mode === 'explore') setMode('edit')
+    if (mode === 'edit') setMode('explore')
+  }
   return (
-      <CampusMap/>
+    <>
+      <button onClick={handleChangeMode}>Change Mode</button>
+      <CampusScene mode={mode}/>
+    </>
   )
 }
 
