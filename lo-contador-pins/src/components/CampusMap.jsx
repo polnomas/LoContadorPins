@@ -54,7 +54,7 @@ function CampusMap() {
                     />
                 </div>
                 {pins.map((pin) => (
-                    <Pin key={pin.id} x={pin.x} y={pin.y} id={pin.id} />
+                    <Pin key={pin.id} x={pin.x} y={pin.y} id={pin.id} d={20} scale={currentScale} />
                 ))}
             </div>
         </TransformComponent>
