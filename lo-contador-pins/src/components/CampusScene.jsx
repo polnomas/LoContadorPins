@@ -7,7 +7,6 @@ import Pins from "./Pins";
 function CampusScene({mode}) {
   const [pins, setPins] = useState([])
   const [currentScale, setCurrentScale] = useState(0.4)
-
   const handleSVGClick = (event) => {
     if (mode === 'explore') return
     const rect = event.currentTarget.getBoundingClientRect()
@@ -18,14 +17,11 @@ function CampusScene({mode}) {
       x,
       y,
     };
-
     setPins((prev) => [...prev, newPin]);
   }
   const handleTransformed = (ref, state) => {
     setCurrentScale(state.scale)
   }
-
-
   return (
     <TransformWrapper
       wheel={{

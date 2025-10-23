@@ -6,10 +6,10 @@ function App() {
   const [mode, setMode] = useState('initial')
 
   const handleChangeMode = () => {
-    setMode((prev) => {
+    setMode(prev => {
       if (prev === 'initial') return 'explore'
       if (prev === 'explore') return 'zoom'
-      return 'explore' 
+      return 'explore'
     })
   }
 
@@ -22,33 +22,18 @@ function App() {
 
   return (
     <>
-      {}
       {mode === 'initial' && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.25)',
-            zIndex: 2000,
-          }}
-        >
-          {}
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.25)', zIndex: 2000 }}>
           <button
             className="mode-button"
             onClick={handleChangeMode}
-            style={{
-              position: 'fixed',
-              top: 16,
-              right: 16,
-              zIndex: 2001, 
-            }}
+            style={{ position: 'fixed', top: 16, right: 16, zIndex: 2001 }}
           >
             {buttonText}
           </button>
         </div>
       )}
 
-      {}
       {mode !== 'initial' && (
         <button
           className="mode-button"
@@ -59,7 +44,6 @@ function App() {
         </button>
       )}
 
-      {}
       <div
         className="mode-badge"
         style={{
@@ -71,13 +55,12 @@ function App() {
           padding: '6px 10px',
           borderRadius: 6,
           fontSize: 14,
-          zIndex: 1000,
+          zIndex: 1000
         }}
       >
         Modo: {mode}
       </div>
 
-      {}
       <div style={{ pointerEvents: 'auto' }}>
         <CampusScene mode={mode} />
       </div>
