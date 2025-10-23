@@ -10,7 +10,9 @@ function App() {
   }
   return (
     <>
-      <button onClick={handleChangeMode}>Change Mode</button>
+      <button onClick={handleChangeMode}>
+        {mode === 'explore' ? 'Change to EditMode' : 'Change to ExploreMode'}
+      </button>
       <CampusScene mode={mode}/>
     </>
   )
