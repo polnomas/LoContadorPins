@@ -44,23 +44,13 @@ function App() {
           {buttonText}
         </button>
       )}
+      {/* 🔹 Texto fijo visible siempre */}
+      <div className="fixed-text">
+  <h1 className="title">Lo Contapixel</h1>
+  <p className="subtitle">Conoce, Explora y Expresate</p>
+</div>
 
-      <div
-        className="mode-badge"
-        style={{
-          position: 'fixed',
-          bottom: 16,
-          left: 16,
-          background: 'rgba(0,0,0,.7)',
-          color: '#fff',
-          padding: '6px 10px',
-          borderRadius: 6,
-          fontSize: 14,
-          zIndex: 1000
-        }}
-      >
-        Modo: {mode}
-      </div>
+      
 
       <div style={{ pointerEvents: 'auto' }}>
         <CampusScene mode={mode} />
@@ -70,3 +60,4 @@ function App() {
 }
 
 export default App
+
