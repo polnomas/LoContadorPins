@@ -1,11 +1,17 @@
 .pin {
   position: absolute;
-  /* width: 10px;
-  height: 10px; */
-  background-color: #ff0000;
-  border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: auto;
   cursor: pointer;
   z-index: 10;
+
+  /* 💡 Reemplaza el fondo rojo por la imagen */
+  background-image: url('/images/cora.png');
+  background-size: contain;   /* ajusta la imagen sin distorsionar */
+  background-repeat: no-repeat;
+  background-position: center;
+
+  /* Opcional: si tu imagen es transparente y quieres margen */
+  width: 30px;
+  height: 30px;
 }
