@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import '../styles/App.css'
 import CampusScene from './CampusScene'
+import ModalProvider from '../providers/ModalProvider'
 
 function App() {
   const [mode, setMode] = useState('initial')
@@ -21,7 +22,7 @@ function App() {
       : 'Presiona aquí para hacer zoom en el mapa'
 
   return (
-    <>
+    <ModalProvider>
       {mode === 'initial' && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.25)', zIndex: 2000 }}>
           <button
@@ -64,7 +65,7 @@ function App() {
       <div style={{ pointerEvents: 'auto' }}>
         <CampusScene mode={mode} />
       </div>
-    </>
+    </ModalProvider>
   )
 }
 
