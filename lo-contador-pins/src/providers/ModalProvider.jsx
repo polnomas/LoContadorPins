@@ -6,7 +6,6 @@ import "../styles/ModalProvider.css";
 function ModalProvider({ children }) {
   const [modal, setModal] = useState({ isOpen: false, content: null });
 
-
   useEffect(() => {
     ReactModal.setAppElement("#root");
   }, []);
@@ -32,8 +31,21 @@ function ModalProvider({ children }) {
         onRequestClose={closeModal}
         overlayClassName="modal-overlay"
         className="modal-content"
+        style={{
+          content: {
+            position: "static",  
+            inset: "unset",       
+            padding: 0,
+            border: "none",
+            background: "transparent",
+            overflow: "visible",
+          },
+        }}
       >
-        {renderedContent}
+        {}
+        <div className="modal-center">
+          {renderedContent}
+        </div>
       </ReactModal>
     </ModalContext.Provider>
   );
