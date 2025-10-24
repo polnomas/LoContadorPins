@@ -3,13 +3,12 @@ import useModal from "../hooks/useModal";
 import PinDetail from "./PinDetail";
 
 function Pin({ x, y, scale, d }) {
-  //NOTE: antes había id en el objeto
   const { openModal } = useModal();
+
   const handleClick = () => {
-    openModal(
-        <PinDetail/>
-    )
-  }
+    openModal(<PinDetail />);
+  };
+
   return (
     <div
       className="pin"
