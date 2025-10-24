@@ -6,7 +6,7 @@ import "../styles/ModalProvider.css";
 function ModalProvider({ children }) {
   const [modal, setModal] = useState({ isOpen: false, content: null });
 
-  // Configurar el elemento raíz para ReactModal
+
   useEffect(() => {
     ReactModal.setAppElement("#root");
   }, []);

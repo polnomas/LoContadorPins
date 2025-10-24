@@ -7,8 +7,8 @@ function PinDetail() {
   return (
     <div
       style={{
-        backgroundColor: "black",
-        border: "1px solid #ccc",
+        backgroundColor: "transparent",
+        border: "0px",
         borderRadius: "8px",
         padding: "20px",
         maxWidth: "500px",

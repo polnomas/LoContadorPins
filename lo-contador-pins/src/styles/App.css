@@ -1,7 +1,7 @@
-/* 🔸 Importa tipografía pixel-art desde Google Fonts */
+
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* 🔸 Importa tu tipografía local Monogram */
+
 @font-face {
   font-family: 'Monogram';
   src: url('../assets/fonts/monogram.ttf') format('truetype');
@@ -9,7 +9,7 @@
   font-style: normal;
 }
 
-/* 🔹 Botón principal */
+
 .mode-button {
   position: fixed;
   top: 20px;
@@ -47,7 +47,7 @@
   outline-offset: 2px;
 }
 
-/* 🔹 Contenedor fijo superior izquierdo */
+
 .fixed-text {
   position: fixed;
   top: 20px;
@@ -57,7 +57,7 @@
   z-index: 9999;
 }
 
-/* 🔸 Título “Lo Contapixel” */
+
 .fixed-text .title {
   font-family: 'Press Start 2P', monospace;
   font-size: 25px;
@@ -65,7 +65,7 @@
   text-transform: uppercase;
 }
 
-/* 🔸 Bajada “Conoce, Explora y Exprésate” */
+
 .fixed-text .subtitle {
   font-family: 'Monogram', sans-serif;
   font-size: 20px;
