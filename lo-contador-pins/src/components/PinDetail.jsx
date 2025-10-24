@@ -1,8 +1,10 @@
-import useModal from "../hooks/useModal";
+// import useModal from "../hooks/useModal"
+import PinImage from "./PinImage"
 
-function PinDetail() {
-  const { closeModal } = useModal();
-
+function PinDetail({publicId, description}) {
+  // const { closeModal } = useModal();
+  console.log('publicId', publicId)
+  console.log('description', description)
   return (
     <div
       style={{
@@ -22,20 +24,18 @@ function PinDetail() {
       }}
     >
       {/* Imagen del pin */}
-      <img
-  src="/images/01.png"
-  alt="Pin del campus"
-  style={{
-    width: "400px",   
-    height: "400px",
-    objectFit: "cover",
-    border: "4px solid #000",
-    boxShadow: "4px 4px 0 #777",
-  }}
-/>
-
-
-      {}
+      <PinImage publicId={publicId}/>
+      {/* <img
+        src="/images/01.png"
+        alt="Pin del campus"
+        style={{
+            width: "400px",   
+            height: "400px",
+            objectFit: "cover",
+            border: "4px solid #000",
+            boxShadow: "4px 4px 0 #777",
+        }}
+    /> */}
       <div style={{ textAlign: "left", flex: 1, maxWidth: "450px" }}>
         <h2
           style={{
@@ -52,9 +52,7 @@ function PinDetail() {
             lineHeight: "1.8",
           }}
         >
-          Aquí irán los detalles del pin seleccionado. Puedes incluir una descripción
-          más extensa, información sobre su ubicación, historia o elementos destacados
-          del lugar.
+          {description}
         </p>
       </div>
     </div>

@@ -21,7 +21,7 @@ const UploadWidget = ({ publicIdSetter }) => {
   return (
     <div>
         <button onClick={() => widgetRef.current.open()}>
-            Upload
+            Subir Imagen
         </button>
     </div>
   )

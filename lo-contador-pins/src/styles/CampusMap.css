@@ -1,31 +1,18 @@
 /* html, body, #root { height: 100%; margin: 0; } */
 
-.pin-overlay {
-    position: relative;
-    /* display: inline-block; */
-    display: block;
-    cursor: crosshair;
-    width: 100vw;
-    height: 100vh;
-    /* overflow: hidden; */
-}
-
 .map-wrap {
-    width: 100%;
-    height: 100%;
-    /* position: absolute; */
-    display: block;
-    /* justify-content: center;
-    align-items: center; */
+    position: relative;
+    display: inline-block;
+    /* El contenedor se ajusta al tamaño de la imagen */
 }
 
-.map-svg-wrap {
-    width: 100%;
-    height: 100%;
+.map-png-wrap {
+    position: relative;
+    display: inline-block;
 }
 
-.map-svg-wrap svg {
+.map-wrap-png {
+  display: block;
   /* width: 100%;
   height: auto; */
-  display: block;
 }
