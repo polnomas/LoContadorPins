@@ -3,10 +3,13 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import '../styles/CampusScene.css'
 import CampusMap from "./CampusMap";
 import Pins from "./Pins";
+import useModal from "../hooks/useModal";
+import PinSubmit from "./PinSubmit";
 
 function CampusScene({mode}) {
   const [pins, setPins] = useState([])
   const [currentScale, setCurrentScale] = useState(0.4)
+  const { openModal } = useModal()
   const handleSVGClick = (event) => {
     if (mode === 'explore') return
     const rect = event.currentTarget.getBoundingClientRect()
@@ -18,6 +21,7 @@ function CampusScene({mode}) {
       y,
     };
     setPins((prev) => [...prev, newPin]);
+    openModal(<PinSubmit/>)
   }
   const handleTransformed = (ref, state) => {
     setCurrentScale(state.scale)

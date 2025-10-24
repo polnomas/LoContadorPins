@@ -6,10 +6,9 @@ function Pin({ x, y, scale, d }) {
   //NOTE: antes había id en el objeto
   const { openModal } = useModal();
   const handleClick = () => {
-    openModal(
-        <PinDetail/>
-    )
+    openModal(<PinDetail />)
   }
+  console.log('Holaaaaaa')
   return (
     <div
       className="pin"
