@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import "../styles/CampusScene.css";
 import CampusMap from "./CampusMap";
 import Pins from "./Pins";
 import useModal from "../hooks/useModal";
 import PinSubmit from "./PinSubmit";
+import useApi from "../hooks/useApi";
 
 function CampusScene({ mode }) {
   const [pins, setPins] = useState([]);
   const [currentScale, setCurrentScale] = useState(0.4);
   const { openModal } = useModal();
+  const { api } = useApi()
   const handleSVGClick = (event) => {
     if (mode === "explore") return;
     const rect = event.currentTarget.getBoundingClientRect();
@@ -22,6 +24,12 @@ function CampusScene({ mode }) {
   const handleTransformed = (ref, state) => {
     setCurrentScale(state.scale);
   };
+  useEffect(() => {
+    void (async () => {
+      const savedPins = await api.getAllPins()
+      setPins(savedPins)
+    })()
+  }, [api])//TODO: revisar si está bien
   return (
     <TransformWrapper
       wheel={{

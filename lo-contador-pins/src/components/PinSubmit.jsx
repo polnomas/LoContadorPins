@@ -3,26 +3,29 @@ import { useState } from "react"
 import PinImage from "./PinImage"
 import "../styles/PinSubmit.css"
 import useModal from "../hooks/useModal"
+import useApi from "../hooks/useApi"
 
 function PinSubmit({x, y, pinsSetter}) {
   const [publicId, setPublicId] = useState(null)
   const [description, setDescription] = useState("")
   const { closeModal } = useModal()
+  const { api } = useApi()
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value)
   }
-  const handleAccept = () => {
+  const handleAccept = async () => {
     if (!publicId) return
     const newPin = {
-      id: Date.now().toString(),
       x,
       y,
       publicId,
       description
     }
+    newPin._id = await api.createNewPin(newPin)
     console.log(newPin.publicId)
     console.log(newPin.description)
+    console.log(newPin._id)
     pinsSetter((prev) => [...prev, newPin])
     closeModal()
   }

@@ -6,7 +6,7 @@ function Pins({ pins, currentScale, d }) {
             key={pin.id}
             x={pin.x}
             y={pin.y}
-            id={pin.id}
+            id={pin._id}
             d={d}
             scale={currentScale}
             publicId={pin.publicId}
