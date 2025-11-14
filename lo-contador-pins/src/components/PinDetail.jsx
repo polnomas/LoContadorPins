@@ -22,6 +22,7 @@ function PinDetail({publicId, description}) {
         fontFamily: "'Press Start 2P', monospace",
         color: "#111",
       }}
+      onClick={(e) => e.stopPropagation()}
     >
       {/* Imagen del pin */}
       <PinImage publicId={publicId}/>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import "../styles/CampusScene.css";
 import CampusMap from "./CampusMap";
@@ -7,20 +7,52 @@ import useModal from "../hooks/useModal";
 import PinSubmit from "./PinSubmit";
 import useApi from "../hooks/useApi";
 
-function CampusScene({ mode }) {
+function CampusScene() {
   const [pins, setPins] = useState([]);
   const [currentScale, setCurrentScale] = useState(0.4);
   const { openModal } = useModal();
   const { api } = useApi()
-  const handleSVGClick = (event) => {
-    if (mode === "explore") return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / currentScale;
-    const y = (event.clientY - rect.top) / currentScale;
-    openModal(
-      <PinSubmit x={x} y={y} pinsSetter={setPins} currentScale={currentScale} />
-    );
-  };
+
+  const pressTimer = useRef(null)
+  const isPanning = useRef(false)
+  const isPressing = useRef(false)
+  const rect = useRef(null)
+  const clientX = useRef(null)
+  const clientY = useRef(null)
+
+  const handlePressStart = (event) => {
+    isPressing.current = true
+    rect.current = event.currentTarget.getBoundingClientRect()
+    clientX.current = event.touches ? event.touches[0].clientX : event.clientX
+    clientY.current = event.touches ? event.touches[0].clientY : event.clientY
+    // console.log('PressStart')
+    pressTimer.current = setTimeout(() => {
+      // console.log('timeout terminado')
+      if (!isPanning.current) {
+        const x = (clientX.current - rect.current.left) / currentScale
+        const y = (clientY.current - rect.current.top) / currentScale
+        openModal(
+          <PinSubmit x={x} y={y} pinsSetter={setPins}/>
+        )
+      }
+    }, 1000)
+  }
+
+  const handlePressMove = () => {
+    // console.log('Press Move')
+    if (!isPressing.current) return
+    // console.log('PANNING')
+    isPanning.current = true
+    clearTimeout(pressTimer.current)
+  }
+
+  const handlePressEnd = () => {
+    isPressing.current = false
+    // console.log('Press End')
+    isPanning.current = false
+    clearTimeout(pressTimer.current)
+  }
+
   const handleTransformed = (ref, state) => {
     setCurrentScale(state.scale);
   };
@@ -33,12 +65,9 @@ function CampusScene({ mode }) {
   return (
     <TransformWrapper
       wheel={{
-        disabled: mode !== "explore",
         step: 0.01,
         smoothStep: 0.002,
       }}
-      panning={{ disabled: mode !== "explore" }}
-      pinch={{ disabled: mode !== "explore" }}
       zoomAnimation={{ disabled: false, size: 0.3, animationTime: 400 }}
       doubleClick={{ disabled: true }}
       minScale={0.4}
@@ -52,7 +81,20 @@ function CampusScene({ mode }) {
       <TransformComponent>
         <div className="map-container">
           <CampusMap />
-          <div className="pin-overlay" onClick={handleSVGClick}>
+          <div
+            className="pin-overlay"
+            //para mouse
+            onMouseDown={handlePressStart}
+            onMouseMove={handlePressMove}
+            onMouseUp={handlePressEnd}
+            onMouseLeave={handlePressEnd}
+            //para touch
+            onTouchStart={handlePressStart}
+            onTouchMove={handlePressMove}
+            onTouchEnd={handlePressEnd}
+            onTouchCancel={handlePressEnd}
+            onContextMenu={(e) => e.preventDefault()}
+          >
             <Pins pins={pins} d={20} currentScale={currentScale} />
           </div>
         </div>

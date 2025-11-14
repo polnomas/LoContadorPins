@@ -43,7 +43,7 @@ function ModalProvider({ children }) {
         }}
       >
         {}
-        <div className="modal-center">
+        <div className="modal-center" onClick={closeModal}>
           {renderedContent}
         </div>
       </ReactModal>

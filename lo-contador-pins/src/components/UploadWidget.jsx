@@ -10,11 +10,11 @@ const UploadWidget = ({ publicIdSetter }) => {
         uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     },
     (err, result) => {
-        console.log(result)
+        // console.log(result)
         if (result && result.event === 'success') {
             publicIdSetter(result.info.public_id)
-            console.log(result)
-            console.log(result.info.public_id)
+            // console.log(result)
+            // console.log(result.info.public_id)
         }
     })
   }, [])
